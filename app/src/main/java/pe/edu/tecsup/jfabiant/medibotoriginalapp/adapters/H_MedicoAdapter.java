@@ -39,7 +39,6 @@ public class H_MedicoAdapter extends RecyclerView.Adapter<H_MedicoAdapter.ViewHo
         public TextView usuarioText;
         public TextView enfermedadText;
         public TextView hospitalText;
-        //public ImageView fotoImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -48,9 +47,7 @@ public class H_MedicoAdapter extends RecyclerView.Adapter<H_MedicoAdapter.ViewHo
             usuarioText = itemView.findViewById(R.id.usuario_text);
             enfermedadText = itemView.findViewById(R.id.enfermedad_text);
             hospitalText = itemView.findViewById(R.id.hospital_text);
-
-            //fotoImage = itemView.findViewById(R.id.foto_image);
-            //nombreText = itemView.findViewById(R.id.nombre_text);
+            
 
         }
     }
@@ -68,23 +65,6 @@ public class H_MedicoAdapter extends RecyclerView.Adapter<H_MedicoAdapter.ViewHo
 
         viewHolder.fechaText.setText(h_medico.getFecha().toString());
         viewHolder.descripcionText.setText(h_medico.getDescripcion());
-
-        //viewHolder.nombreText.setText(hospital.getNombre());
-        //String url = hospital.getHosp_img();
-        //Picasso.with(viewHolder.itemView.getContext()).load(url).into(viewHolder.fotoImage);
-        //Log.d("Location", "Lat "+hospital.getLatitud().toString()+", Long "+hospital.getLongitud());
-        /*
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(mContext, MapsActivity.class);
-                i.putExtra("latitud", hospital.getLatitud().toString());
-                i.putExtra("longitud", hospital.getLongitud().toString());
-                i.putExtra("nombre", hospital.getNombre());
-                mContext.startActivity(i);
-            }
-        });
-        */
 
     }
 
