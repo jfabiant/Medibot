@@ -38,6 +38,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pe.edu.tecsup.jfabiant.medibotoriginalapp.R;
 import pe.edu.tecsup.jfabiant.medibotoriginalapp.fragments.DialogoError;
+import pe.edu.tecsup.jfabiant.medibotoriginalapp.fragments.SignupPersonalizado;
 import pe.edu.tecsup.jfabiant.medibotoriginalapp.models.Login;
 import pe.edu.tecsup.jfabiant.medibotoriginalapp.models.User;
 import pe.edu.tecsup.jfabiant.medibotoriginalapp.services.ApiService;
@@ -90,8 +91,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Start the Signup activity
-                Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
-                startActivityForResult(intent, REQUEST_SIGNUP);
+                //Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
+                //startActivityForResult(intent, REQUEST_SIGNUP);
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                SignupPersonalizado signup = new SignupPersonalizado();
+                signup.show(fragmentManager, "tagError");
+
             }
         });
 
@@ -104,13 +109,12 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(final LoginResult loginResult) {
-
                 final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
                         R.style.AppTheme_Dark_Dialog);
                 progressDialog.setIndeterminate(true);
                 progressDialog.setMessage("Autenticando ...");
                 progressDialog.show();
-
+                progressDialog.setCancelable(false);
                 new android.os.Handler().postDelayed(
                         new Runnable() {
                             public void run() {
@@ -256,6 +260,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         progressDialog.setIndeterminate(true);
                         progressDialog.setMessage("Autenticando ...");
+                        progressDialog.setCancelable(false);
                         progressDialog.show();
 
                         // TODO: Implement your own authentication logic here.
@@ -279,7 +284,6 @@ public class LoginActivity extends AppCompatActivity {
                                                         preferences.edit().putString("first_name", response.body().getFirst_name()).commit();
                                                         preferences.edit().putString("last_name", response.body().getLast_name()).commit();
                                                         preferences.edit().putString("email", response.body().getEmail()).commit();
-
                                                         //Toast.makeText(LoginActivity.this, "Username: "+response.body().getFirst_name(),
                                                         //      Toast.LENGTH_SHORT).show();
 

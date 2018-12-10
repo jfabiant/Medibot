@@ -72,7 +72,7 @@ public class ConfiguracionFragment extends Fragment {
         emailText = getView().findViewById(R.id.email_text);
         profilePicture = getView().findViewById(R.id.profile_picture);
         logoutBtn = getView().findViewById(R.id.logout_btn);
-        configBtn = getView().findViewById(R.id.config_btn);
+        //configBtn = getView().findViewById(R.id.config_btn);
 
         //Get preferences:
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -88,15 +88,12 @@ public class ConfiguracionFragment extends Fragment {
         lastnameText.setText(last_name);
         emailText.setText(email);
 
-        Toast.makeText(getContext(), profile_picture, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), profile_picture, Toast.LENGTH_SHORT).show();
         if(profile_picture.isEmpty()){
             Picasso.with(getContext()).load(R.drawable.ic_user).into(profilePicture);
         } else {
             Picasso.with(getContext()).load(profile_picture.toString()).into(profilePicture);
         }
-        //Picasso.with(getContext()).load(profile_picture.toString()).into(profilePicture);
-        /*Toast.makeText(getActivity(), username+"\n"+first_name+"\n"+last_name, Toast.LENGTH_SHORT).show();*/
-
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

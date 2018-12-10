@@ -224,7 +224,7 @@ android:layout_height="wrap_content" >
 
                 </LinearLayout>
 
-                <LinearLayout
+                <!--<LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -238,9 +238,8 @@ android:layout_height="wrap_content" >
                         android:drawableLeft="@drawable/ic_iconfinder_config"
                         android:drawablePadding="6dp"
                         android:gravity="left|center"
-                        android:height="60dp"
                         android:padding="6dp"
-                        android:text="Cerrar sesión"
+                        android:text="Configuración"
                         android:textColor="#000"/>
 
                     <View
@@ -249,13 +248,13 @@ android:layout_height="wrap_content" >
                         android:layout_marginTop="15dp"
                         android:background="@color/grey" />
 
-                </LinearLayout>
+                </LinearLayout>-->
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <Button
                         android:id="@+id/logout_btn"
@@ -265,10 +264,9 @@ android:layout_height="wrap_content" >
                         android:drawableLeft="@drawable/ic_iconfinder_logout"
                         android:drawablePadding="6dp"
                         android:gravity="left|center"
-                        android:height="60dp"
                         android:padding="6dp"
-                        android:text="Cerrar sesión"
-                        android:textColor="#000"/>
+                        android:height="25pt"
+                        android:text="Cerrar sesión"/>
 
                     <View
                         android:layout_width="match_parent"

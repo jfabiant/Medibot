@@ -14,12 +14,14 @@ import pe.edu.tecsup.jfabiant.medibotoriginalapp.models.Enfermedad;
 import pe.edu.tecsup.jfabiant.medibotoriginalapp.models.H_Medico;
 import pe.edu.tecsup.jfabiant.medibotoriginalapp.models.Hospital;
 import pe.edu.tecsup.jfabiant.medibotoriginalapp.models.Login;
+import pe.edu.tecsup.jfabiant.medibotoriginalapp.models.Registration;
 import pe.edu.tecsup.jfabiant.medibotoriginalapp.models.User;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 
 public interface ApiService {
 
@@ -51,5 +53,15 @@ public interface ApiService {
     @GET("/api/h_medicos/")
     Call<List<H_Medico>> getH_Medicos();
 
+    @FormUrlEncoded
+    @POST("/rest-auth/registration/")
+    Call<Registration> registration (@Field("username") String username,
+                                    @Field("email") String email,
+                                    @Field("password1") String password1,
+                                    @Field("password2") String password2);
+
+    //@FormUrlEncoded
+    //@PUT("/rest-auth/user/")
+    //Call <User>
 
 }
