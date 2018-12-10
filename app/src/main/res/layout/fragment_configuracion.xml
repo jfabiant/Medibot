@@ -51,28 +51,16 @@ android:layout_height="wrap_content" >
 
 
             <TextView
-                android:id="@+id/tv_address"
+                android:id="@+id/username_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/firstname_text"
                 android:layout_centerHorizontal="true"
                 android:fontFamily="sans-serif"
-                android:text="Lima, Perú"
+                android:text="Username"
                 android:textAllCaps="true"
                 android:textColor="@color/address"
                 android:textSize="14sp" />
-
-            <ImageButton
-                android:id="@+id/settings_button"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="15dp"
-                android:adjustViewBounds="true"
-                android:background="@null"
-                app:srcCompat="@drawable/ic_settings_black_24dp"/>
-
 
 
         </RelativeLayout>
@@ -215,36 +203,6 @@ android:layout_height="wrap_content" >
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Nombre de usuario"
-                        android:textColor="@color/headings"
-                        android:textSize="13sp" />
-
-                    <TextView
-                        android:id="@+id/username_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-light"
-                        android:text="Username"
-                        android:textColor="#000000"
-                        android:textSize="18sp" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="15dp"
-                        android:background="@color/grey" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:text="Apellidos"
                         android:textColor="@color/headings"
                         android:textSize="13sp" />
@@ -266,13 +224,59 @@ android:layout_height="wrap_content" >
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:orientation="vertical">
+                    <Button
+                        android:id="@+id/config_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:text="Configuración"
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@color/grey" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/logout_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="null"
+                        android:drawableLeft="@android:drawable/ic_menu_edit"
+                        android:drawablePadding="6dp"
+                        android:gravity="left|center"
+                        android:height="60dp"
+                        android:padding="6dp"
+                        android:text="Cerrar sesión"
+                        android:textColor="#000"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@color/grey" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
         </RelativeLayout>
 
     </RelativeLayout>
-
-
 
 </ScrollView>

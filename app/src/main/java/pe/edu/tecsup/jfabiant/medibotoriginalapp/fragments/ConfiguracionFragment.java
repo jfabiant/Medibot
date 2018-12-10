@@ -48,7 +48,8 @@ public class ConfiguracionFragment extends Fragment {
     private TextView firstnameText;
     private TextView lastnameText;
     private TextView emailText;
-    private ImageButton settingsButton;
+    private Button logoutBtn;
+    private Button configBtn;
 
     public ConfiguracionFragment() {
         // Required empty public constructor
@@ -69,8 +70,9 @@ public class ConfiguracionFragment extends Fragment {
         firstnameText = getView().findViewById(R.id.firstname_text);
         lastnameText = getView().findViewById(R.id.lastname_text);
         emailText = getView().findViewById(R.id.email_text);
-        settingsButton = getView().findViewById(R.id.settings_button);
         profilePicture = getView().findViewById(R.id.profile_picture);
+        logoutBtn = getView().findViewById(R.id.logout_btn);
+        configBtn = getView().findViewById(R.id.config_btn);
 
         //Get preferences:
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -95,28 +97,13 @@ public class ConfiguracionFragment extends Fragment {
         //Picasso.with(getContext()).load(profile_picture.toString()).into(profilePicture);
         /*Toast.makeText(getActivity(), username+"\n"+first_name+"\n"+last_name, Toast.LENGTH_SHORT).show();*/
 
-        settingsButton.setOnClickListener(new View.OnClickListener() {
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                PopupMenu popupMenu = new PopupMenu(getContext(), settingsButton);
-                popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
-
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if(item.getTitle().equals("Cerrar sesión")){
-                            logout();
-                        }
-                        if(item.getTitle().equals("Configuración")){
-                            Toast.makeText(getContext(), "Configuracion", Toast.LENGTH_SHORT).show();
-                        }
-                        return true;
-                    }
-                });
-                popupMenu.show();
+                logout();
             }
         });
+
 
     }
 
