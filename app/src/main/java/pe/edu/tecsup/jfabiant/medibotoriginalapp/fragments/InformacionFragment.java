@@ -40,7 +40,7 @@ public class InformacionFragment extends Fragment {
 
     private CardView btnEnfermedades;
     private CardView btnHospitales;
-
+    private CardView btnMapas;
     public InformacionFragment() {
         // Required empty public constructor
     }
@@ -61,6 +61,7 @@ public class InformacionFragment extends Fragment {
 
         btnEnfermedades = getView().findViewById(R.id.btn_enfermedades);
         btnHospitales = getView().findViewById(R.id.btn_hospitales);
+        btnMapas = getView().findViewById(R.id.btn_mapas);
 
         btnEnfermedades.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +78,12 @@ public class InformacionFragment extends Fragment {
             }
         });
 
+        btnMapas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Esta opción aun no esta disponible", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,9 +16,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import pe.edu.tecsup.jfabiant.medibotoriginalapp.R;
 import pe.edu.tecsup.jfabiant.medibotoriginalapp.adapters.EnfermedadAdapter;
@@ -30,7 +34,10 @@ import retrofit2.Response;
 
 public class EnfermedadesFragment extends Fragment {
 
-
+    private ProgressBar progressBar;
+    private Handler handler;
+    private Runnable runnable;
+    private Timer timer;
     private final static String TAG = EnfermedadesFragment.class.getSimpleName();
     public RecyclerView listEnfermedades;
 
@@ -51,31 +58,36 @@ public class EnfermedadesFragment extends Fragment {
 
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity)getActivity()).setTitle("Enfermedades estudiadas");
+        ((AppCompatActivity)getActivity()).setTitle("Enfermedades");
 
         listEnfermedades = getView().findViewById(R.id.list_enfermedades);
         listEnfermedades.setLayoutManager(new LinearLayoutManager(getContext()));
         listEnfermedades.setAdapter(new EnfermedadAdapter());
 
-        //Loading ...
+        progressBar = getActivity().findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
+        handler = new Handler();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
 
-        final ProgressDialog progressDialog = new ProgressDialog(getContext(),
-                R.style.AppTheme_Dark_Dialog);
+                //Mientras carga estara haciendo la peticion al servicio web.
+                //Servira para evitar la espera del usuario mostrando la vista en blanco
+                listEnfermedades.setLayoutManager(new LinearLayoutManager(getContext()));
+                listEnfermedades.setAdapter(new EnfermedadAdapter());
+                initialize();
 
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Cargando ...");
-        progressDialog.show();
+            }
+        };
 
-        // TODO: Implement your own authentication logic here.
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        initialize();
-                        progressDialog.dismiss();
-                    }
-                }, 1000);
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(runnable);
 
-        //End loading ...
+            }
+        }, 1000, 1000);
 
     }
 
@@ -102,6 +114,8 @@ public class EnfermedadesFragment extends Fragment {
                         adapter.setEnfermedades(getContext(), enfermedades);
                         adapter.notifyDataSetChanged();
 
+                        progressBar.setVisibility(View.GONE);
+                        timer.cancel();
                     } else {
                         Log.e(TAG, "onError: " + response.errorBody().string());
                         throw new Exception("Error en el servicio");

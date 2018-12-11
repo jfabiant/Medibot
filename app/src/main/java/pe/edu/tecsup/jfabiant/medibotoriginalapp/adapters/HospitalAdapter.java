@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,12 +39,14 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHo
 
         public TextView nombreText;
         public ImageView fotoImage;
-
+        public TextView distritoText;
+        public Button actionButton;
         public ViewHolder(View itemView) {
             super(itemView);
             fotoImage = itemView.findViewById(R.id.foto_image);
             nombreText = itemView.findViewById(R.id.nombre_text);
-
+            distritoText = itemView.findViewById(R.id.distrito_text);
+            actionButton = itemView.findViewById(R.id.action_button);
         }
     }
 
@@ -58,11 +61,12 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHo
 
         final Hospital hospital = this.hospitales.get(position);
         viewHolder.nombreText.setText(hospital.getNombre());
+        viewHolder.distritoText.setText(hospital.getC_distrito());
         String url = hospital.getHosp_img();
         Picasso.with(viewHolder.itemView.getContext()).load(url).into(viewHolder.fotoImage);
-        //Log.d("Location", "Lat "+hospital.getLatitud().toString()+", Long "+hospital.getLongitud());
+        /*Log.d("Location", "Lat "+hospital.getLatitud().toString()+", Long "+hospital.getLongitud());*/
 
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+        viewHolder.actionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(mContext, MapsActivity.class);
@@ -72,6 +76,7 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHo
                 mContext.startActivity(i);
             }
         });
+
 
     }
 
