@@ -3,6 +3,7 @@ package pe.edu.tecsup.jfabiant.medibotoriginalapp.fragments;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,9 +15,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import pe.edu.tecsup.jfabiant.medibotoriginalapp.R;
 import pe.edu.tecsup.jfabiant.medibotoriginalapp.adapters.H_MedicoAdapter;
@@ -32,7 +36,10 @@ import retrofit2.Response;
  */
 public class HistorialFragment extends Fragment {
 
-
+    private ProgressBar progressBar;
+    private Handler handler;
+    private Runnable runnable;
+    private Timer timer;
     private final static String TAG = HistorialFragment.class.getSimpleName();
     public RecyclerView listHistoriales;
 
@@ -59,25 +66,31 @@ public class HistorialFragment extends Fragment {
         listHistoriales.setLayoutManager(new LinearLayoutManager(getContext()));
         listHistoriales.setAdapter(new H_MedicoAdapter());
 
-        //Loading ...
+        progressBar = getActivity().findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
+        handler = new Handler();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
 
-        final ProgressDialog progressDialog = new ProgressDialog(getContext(),
-                R.style.AppTheme_Dark_Dialog);
+                //Mientras carga estara haciendo la peticion al servicio web.
+                //Servira para evitar la espera del usuario mostrando la vista en blanco
+                listHistoriales.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Cargando ...");
-        progressDialog.show();
+                listHistoriales.setAdapter(new H_MedicoAdapter());
+                initialize();
 
-        // TODO: Implement your own authentication logic here.
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        initialize();
-                        progressDialog.dismiss();
-                    }
-                }, 1000);
+            }
+        };
 
-        //End loading ...
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(runnable);
+
+            }
+        }, 1000, 1000);
 
     }
 
@@ -104,6 +117,8 @@ public class HistorialFragment extends Fragment {
                         adapter.setH_medicos(getContext(), h_medicos);
                         adapter.notifyDataSetChanged();
 
+                        progressBar.setVisibility(View.GONE);
+                        timer.cancel();
                     } else {
                         Log.e(TAG, "onError: " + response.errorBody().string());
                         throw new Exception("Error en el servicio");

@@ -1,5 +1,6 @@
 package pe.edu.tecsup.jfabiant.medibotoriginalapp.activities;
 
+import android.app.AlertDialog;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import pe.edu.tecsup.jfabiant.medibotoriginalapp.fragments.ConfiguracionFragment
 import pe.edu.tecsup.jfabiant.medibotoriginalapp.fragments.HistorialFragment;
 import pe.edu.tecsup.jfabiant.medibotoriginalapp.fragments.InformacionFragment;
 import pe.edu.tecsup.jfabiant.medibotoriginalapp.fragments.WatsonFragment;
+import pe.edu.tecsup.jfabiant.medibotoriginalapp.util.NetworkUtils;
 
 public class DashboardActivity extends AppCompatActivity {
 
@@ -49,6 +51,14 @@ public class DashboardActivity extends AppCompatActivity {
                             selectFragment = new ConfiguracionFragment();
                             break;
                     }
+
+                    NetworkUtils utils = new NetworkUtils();
+
+                    if (!NetworkUtils.isConnected(DashboardActivity.this)) {
+                        new AlertDialog.Builder(DashboardActivity.this).setIcon(R.drawable.ic_error_outline_black_24dp).setTitle("Sin conexión a internet").setMessage("Por favor conectese a la red").create().show();
+                        return false;
+                    }
+
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectFragment).commit();
                     return true;
                 }
