@@ -1,6 +1,7 @@
 package pe.edu.tecsup.jfabiant.medibotoriginalapp.activities;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -42,7 +43,8 @@ public class DashboardActivity extends AppCompatActivity {
                             selectFragment = new HistorialFragment();
                             break;
                         case R.id.nav_watson:
-                            selectFragment = new WatsonFragment();
+                            //selectFragment = new WatsonFragment();
+                            startActivity(new Intent(DashboardActivity.this, WatsonActivity.class));
                             break;
                         case R.id.nav_informacion:
                             selectFragment = new InformacionFragment();
@@ -50,6 +52,9 @@ public class DashboardActivity extends AppCompatActivity {
                         case R.id.nav_configuracion:
                             selectFragment = new ConfiguracionFragment();
                             break;
+                            default:
+                                selectFragment = null;
+                                break;
                     }
 
                     NetworkUtils utils = new NetworkUtils();
@@ -59,7 +64,9 @@ public class DashboardActivity extends AppCompatActivity {
                         return false;
                     }
 
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectFragment).commit();
+                    if(selectFragment!=null){
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectFragment).commit();
+                    }
                     return true;
                 }
             };

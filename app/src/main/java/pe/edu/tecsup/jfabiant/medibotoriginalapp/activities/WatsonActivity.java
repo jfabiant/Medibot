@@ -1,5 +1,9 @@
-package pe.edu.tecsup.jfabiant.medibotoriginalapp.fragments;
+package pe.edu.tecsup.jfabiant.medibotoriginalapp.activities;
 
+import android.annotation.SuppressLint;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.os.Bundle;
 
 import android.Manifest;
 import android.content.Context;
@@ -10,17 +14,15 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
+
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -31,6 +33,7 @@ import com.ibm.watson.developer_cloud.android.library.audio.StreamPlayer;
 import com.ibm.watson.developer_cloud.android.library.audio.utils.ContentType;
 import com.ibm.watson.developer_cloud.assistant.v2.Assistant;
 import com.ibm.watson.developer_cloud.assistant.v2.model.CreateSessionOptions;
+import com.ibm.watson.developer_cloud.assistant.v2.model.MessageContext;
 import com.ibm.watson.developer_cloud.assistant.v2.model.MessageInput;
 import com.ibm.watson.developer_cloud.assistant.v2.model.MessageOptions;
 import com.ibm.watson.developer_cloud.assistant.v2.model.MessageResponse;
@@ -53,9 +56,8 @@ import pe.edu.tecsup.jfabiant.medibotoriginalapp.models.Message;
 import pe.edu.tecsup.jfabiant.medibotoriginalapp.util.ClickListener;
 import pe.edu.tecsup.jfabiant.medibotoriginalapp.util.RecyclerTouchListener;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class WatsonFragment extends Fragment {
+public class WatsonActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private ChatAdapter mAdapter;
@@ -67,7 +69,7 @@ public class WatsonFragment extends Fragment {
     private boolean initialRequest;
     private boolean permissionToRecordAccepted = false;
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
-    private static String TAG = "MainActivity";
+    private static String TAG = WatsonActivity.class.getSimpleName();
     private static final int RECORD_REQUEST_CODE = 101;
     private boolean listening = false;
     private MicrophoneInputStream capture;
@@ -79,11 +81,7 @@ public class WatsonFragment extends Fragment {
     private SpeechToText speechService;
     private TextToSpeech textToSpeech;
 
-    public WatsonFragment() {
-        // Required empty public constructor
-    }
-
-    public void createServices(){
+    private void createServices() {
         watsonAssistant = new Assistant("2018-11-08", new IamOptions.Builder()
                 .apiKey(mContext.getString(R.string.assistant_apikey))
                 .build());
@@ -99,31 +97,27 @@ public class WatsonFragment extends Fragment {
                 .build());
     }
 
+    @SuppressLint("WrongViewCast")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_watson, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_watson);
 
         mContext = getApplicationContext();
 
-        inputMessage = getActivity().findViewById(R.id.message);
-        btnSend = getActivity().findViewById(R.id.btn_send);
-        btnRecord = getActivity().findViewById(R.id.btn_record);
+        inputMessage = findViewById(R.id.message);
+        btnSend = findViewById(R.id.btn_send);
+        btnRecord = findViewById(R.id.btn_record);
         String customFont = "Montserrat-Regular.ttf";
-        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), customFont);
+        Typeface typeface = Typeface.createFromAsset(getAssets(), customFont);
         inputMessage.setTypeface(typeface);
-        recyclerView = getActivity().findViewById(R.id.recycler_view);
+        recyclerView = findViewById(R.id.recycler_view);
 
         messageArrayList = new ArrayList<>();
         mAdapter = new ChatAdapter(messageArrayList);
-        microphoneHelper = new MicrophoneHelper(getActivity());
+        microphoneHelper = new MicrophoneHelper(this);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -132,7 +126,7 @@ public class WatsonFragment extends Fragment {
         this.initialRequest = true;
 
 
-        int permission = ContextCompat.checkSelfPermission(getContext(),
+        int permission = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.RECORD_AUDIO);
 
         if (permission != PackageManager.PERMISSION_GRANTED) {
@@ -179,6 +173,9 @@ public class WatsonFragment extends Fragment {
         sendMessage();
     }
 
+    ;
+
+    // Speech-to-Text Record Audio permission
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -201,7 +198,7 @@ public class WatsonFragment extends Fragment {
 
             case MicrophoneHelper.REQUEST_PERMISSION: {
                 if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getContext(), "Permission to record audio denied", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Permission to record audio denied", Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -210,7 +207,7 @@ public class WatsonFragment extends Fragment {
     }
 
     protected void makeRequest() {
-        ActivityCompat.requestPermissions(getActivity(),
+        ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.RECORD_AUDIO},
                 MicrophoneHelper.REQUEST_PERMISSION);
     }
@@ -267,7 +264,7 @@ public class WatsonFragment extends Fragment {
                         // speak the message
                         new SayTask().execute(outMessage.getMessage());
 
-                        getActivity().runOnUiThread(new Runnable() {
+                        runOnUiThread(new Runnable() {
                             public void run() {
                                 mAdapter.notifyDataSetChanged();
                                 if (mAdapter.getItemCount() > 1) {
@@ -315,13 +312,13 @@ public class WatsonFragment extends Fragment {
                 }
             }).start();
             listening = true;
-            Toast.makeText(getContext(), "Listening....Click to Stop", Toast.LENGTH_LONG).show();
+            Toast.makeText(WatsonActivity.this, "Listening....Click to Stop", Toast.LENGTH_LONG).show();
 
         } else {
             try {
                 microphoneHelper.closeInputStream();
                 listening = false;
-                Toast.makeText(getContext(), "Stopped Listening....Click to Start", Toast.LENGTH_LONG).show();
+                Toast.makeText(WatsonActivity.this, "Stopped Listening....Click to Start", Toast.LENGTH_LONG).show();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -329,10 +326,15 @@ public class WatsonFragment extends Fragment {
         }
     }
 
+    /**
+     * Check Internet Connection
+     *
+     * @return
+     */
     private boolean checkInternetConnection() {
         // get Connectivity Manager object to check connection
         ConnectivityManager cm =
-                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null &&
@@ -342,12 +344,13 @@ public class WatsonFragment extends Fragment {
         if (isConnected) {
             return true;
         } else {
-            Toast.makeText(getContext(), " No Internet Connection available ", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, " No Internet Connection available ", Toast.LENGTH_LONG).show();
             return false;
         }
 
     }
 
+    //Private Methods - Speech to Text
     private RecognizeOptions getRecognizeOptions(InputStream audio) {
         return new RecognizeOptions.Builder()
                 .audio(audio)
@@ -382,7 +385,7 @@ public class WatsonFragment extends Fragment {
     }
 
     private void showMicText(final String text) {
-        getActivity().runOnUiThread(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 inputMessage.setText(text);
@@ -391,7 +394,7 @@ public class WatsonFragment extends Fragment {
     }
 
     private void enableMicButton() {
-        getActivity().runOnUiThread(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 btnRecord.setEnabled(true);
@@ -400,13 +403,14 @@ public class WatsonFragment extends Fragment {
     }
 
     private void showError(final Exception e) {
-        getActivity().runOnUiThread(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(WatsonActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
         });
     }
+
 
 }
